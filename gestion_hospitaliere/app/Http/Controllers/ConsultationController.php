@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Patient;
 use App\Models\Consultation;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,14 +21,15 @@ class ConsultationController extends Controller
     public function create()
     {
         $patients = Patient::all();
-        return view('consultations.create', compact('patients'));
+        $doctors = Employee::where('role', 'Médecin')->get(); // Filtrer les médecins
+        return view('consultations.create', compact('patients', 'doctors'));
     }
 
-    // Afficher le formulaire de modification d'une consultation
     public function edit(Consultation $consultation)
     {
         $patients = Patient::all();
-        return view('consultations.edit', compact('consultation', 'patients'));
+        $doctors = Employee::where('role', 'Médecin')->get();
+        return view('consultations.edit', compact('consultation', 'patients', 'doctors'));
     }
 
     // Supprimer une consultation
@@ -51,6 +53,7 @@ class ConsultationController extends Controller
     {
         $validated = $request->validate([
             'patient_id' => 'required|exists:patients,id',
+            'employee_id' => 'required|exists:employees,id',
             'date' => 'required|date',
             'raison' => 'required|string',
             'ordonnances' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
@@ -73,6 +76,7 @@ class ConsultationController extends Controller
         // Création de la consultation
         Consultation::create([
             'patient_id' => $validated['patient_id'],
+            'employee_id' => $validated['employee_id'],
             'date' => $validated['date'],
             'raison' => $validated['raison'],
             'ordonnances' => $ordonnancesPath,
@@ -87,6 +91,7 @@ class ConsultationController extends Controller
     {
         $validated = $request->validate([
             'patient_id' => 'required|exists:patients,id',
+            'employee_id' => 'required|exists:employees,id',
             'date' => 'required|date',
             'raison' => 'required|string',
             'ordonnances' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
@@ -115,6 +120,7 @@ class ConsultationController extends Controller
 
         // Mise à jour des autres champs
         $consultation->patient_id = $validated['patient_id'];
+        $consultation->employee_id = $validated['employee_id'];
         $consultation->date = $validated['date'];
         $consultation->raison = $validated['raison'];
 

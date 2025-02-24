@@ -19,6 +19,18 @@
                     @endforeach
                 </select>
             </div>
+
+            <div class="mb-3">
+                <label for="employee_id" class="form-label">Médecin</label>
+                <select class="form-control" id="employee_id" name="employee_id" required>
+                    <option value="">-- Sélectionner un médecin --</option>
+                    @foreach ($doctors as $doctor)
+                        <option value="{{ $doctor->id }}" {{ $consultation->employee_id == $doctor->id ? 'selected' : '' }}>
+                            {{ $doctor->name }} ({{ $doctor->role }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
             
 
             <div class="mb-3">

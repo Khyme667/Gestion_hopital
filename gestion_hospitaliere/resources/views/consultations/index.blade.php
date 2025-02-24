@@ -12,8 +12,9 @@
                 <th>Patient</th>
                 <th>Date</th>
                 <th>Raison</th>
-                <th>Ordonnances</th>
+                <th>Médecin</th>
                 <th>Prescriptions</th>
+                <th>Ordonnances</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -24,6 +25,7 @@
                     <td>{{ $consultation->patient->name }}</td>
                     <td>{{ $consultation->date }}</td>
                     <td>{{ $consultation->raison }}</td>
+                    <td>{{ $consultation->employee->name ?? 'Non attribué' }}</td>
                     <td>
                         @if($consultation->ordonnances)
                             <a href="{{ asset('storage/' . $consultation->ordonnances) }}" target="_blank">Télécharger</a>
