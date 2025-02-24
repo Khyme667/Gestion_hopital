@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,8 @@ Route::middleware('auth')->group(function () {
 // Routes pour la gestion des patients et consultations
 Route::resource('patients', PatientController::class);
 Route::resource('consultations', ConsultationController::class);
+Route::resource('employees', EmployeeController::class);
+
 
 // Supprime ces routes qui sont redondantes ou incorrectes
 // Route::get('consultations/create', [ConsultationController::class, 'create'])->name('consultations.create');
