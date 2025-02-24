@@ -39,7 +39,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Stocks</h5>
-                    <a href="#" class="btn btn-primary">Accéder</a>
+                    <a href="{{ route('stocks.index') }}" class="btn btn-primary">Accéder</a>
                 </div>
             </div>
         </div>
