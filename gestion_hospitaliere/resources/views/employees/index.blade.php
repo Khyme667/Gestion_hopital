@@ -12,6 +12,7 @@
     @endif
 
     <a href="{{ route('employees.create') }}" class="btn btn-primary mb-3">Ajouter un employé</a>
+    <a href="{{ route('schedules.index') }}" class="btn btn-primary mb-3 ml-5">Gestion des horraires</a>
 
     <table class="table table-bordered">
         <thead>
