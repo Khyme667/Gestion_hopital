@@ -1,9 +1,9 @@
 @extends('layouts.main')
 
 @section('content')
-    <h1>Dashboard</h1>
+    <h1 class="text-center py-5">Dashboard</h1>
 
-    <div class="row">
+    <div class="row py-5">
         <!-- Card pour la gestion des patients -->
         <div class="col-md-3">
             <div class="card">

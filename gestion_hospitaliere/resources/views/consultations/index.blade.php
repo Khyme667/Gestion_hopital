@@ -2,6 +2,12 @@
 
 @section('content')
     <h1>Liste des Consultations</h1>
+    <!-- Message de succès -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <a href="{{ route('consultations.create') }}" class="btn btn-success mb-3">Nouvelle Consultation</a>
 

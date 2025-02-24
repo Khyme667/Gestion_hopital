@@ -28,8 +28,8 @@ class ScheduleController extends Controller
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
             'day' => 'required|string',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
         ]);
 
         Schedule::create($request->all());
@@ -50,8 +50,8 @@ class ScheduleController extends Controller
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
             'day' => 'required|string',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
         ]);
 
         $schedule->update($request->all());

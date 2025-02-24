@@ -32,7 +32,7 @@ class PatientController extends Controller
         ]);
 
         Patient::create($request->all());
-        return redirect()->route('patients.index');
+        return redirect()->route('patients.index')->with('success', 'Patient créer avec succès.');
     }
 
     // Afficher le formulaire de modification d'un patient
@@ -52,14 +52,14 @@ class PatientController extends Controller
         ]);
 
         $patient->update($request->all());
-        return redirect()->route('patients.index');
+        return redirect()->route('patients.index')->with('success', 'Patient mise à jour avec succès.');
     }
 
     // Supprimer un patient
     public function destroy(Patient $patient)
     {
         $patient->delete();
-        return redirect()->route('patients.index');
+        return redirect()->route('patients.index')->with('success', 'Patient supprimé avec succès.');
     }
 
     

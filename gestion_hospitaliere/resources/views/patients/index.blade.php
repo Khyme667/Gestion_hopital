@@ -4,6 +4,12 @@
     <h1>Liste des Patients</h1>
 
     <a href="{{ route('patients.create') }}" class="btn btn-success mb-3">Ajouter un Patient</a>
+    <!-- Message de succès -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <table class="table table-bordered">
         <thead>

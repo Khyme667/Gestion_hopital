@@ -20,4 +20,9 @@ class Employee extends Model
     protected $casts = [
         'schedule' => 'array', // Pour gérer les horaires en JSON
     ];
+
+    public function consultations()
+    {
+        return $this->hasMany(Consultation::class);
+    }
 }
