@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Traits\LogsActivity; // Ajouter le trait
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
+    use LogsActivity; // Utiliser le trait
+
     public function index()
     {
         $employees = Employee::all();
@@ -27,7 +30,10 @@ class EmployeeController extends Controller
             'role' => 'required|in:Médecin,Infirmier,Administrateur',
         ]);
 
-        Employee::create($request->all());
+        $employee = Employee::create($request->all());
+
+        // Journaliser l'action "created"
+        $this->logAction('created', Employee::class, $employee->id, "Employé {$employee->name} ajouté");
 
         return redirect()->route('employees.index')->with('success', 'Employé ajouté avec succès.');
     }
@@ -48,11 +54,17 @@ class EmployeeController extends Controller
 
         $employee->update($request->all());
 
+        // Journaliser l'action "updated"
+        $this->logAction('updated', Employee::class, $employee->id, "Employé {$employee->name} mis à jour");
+
         return redirect()->route('employees.index')->with('success', 'Employé mis à jour avec succès.');
     }
 
     public function destroy(Employee $employee)
     {
+        // Journaliser l'action "deleted" avant suppression
+        $this->logAction('deleted', Employee::class, $employee->id, "Employé {$employee->name} supprimé");
+
         $employee->delete();
         return redirect()->route('employees.index')->with('success', 'Employé supprimé.');
     }

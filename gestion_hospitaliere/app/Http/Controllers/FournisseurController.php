@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fournisseur;
+use App\Traits\LogsActivity; // Ajouter le trait
 use Illuminate\Http\Request;
 
 class FournisseurController extends Controller
 {
+    use LogsActivity; // Utiliser le trait
+
     public function index()
     {
         $fournisseurs = Fournisseur::all();
@@ -26,7 +29,11 @@ class FournisseurController extends Controller
             'adresse' => 'nullable|string|max:255',
         ]);
 
-        Fournisseur::create($validated);
+        $fournisseur = Fournisseur::create($validated);
+
+        // Journaliser l'action "created"
+        $this->logAction('created', Fournisseur::class, $fournisseur->id, "Fournisseur {$fournisseur->nom} ajouté");
+
         return redirect()->route('fournisseurs.index')->with('success', 'Fournisseur ajouté avec succès.');
     }
 
@@ -44,11 +51,18 @@ class FournisseurController extends Controller
         ]);
 
         $fournisseur->update($validated);
+
+        // Journaliser l'action "updated"
+        $this->logAction('updated', Fournisseur::class, $fournisseur->id, "Fournisseur {$fournisseur->nom} mis à jour");
+
         return redirect()->route('fournisseurs.index')->with('success', 'Fournisseur mis à jour avec succès.');
     }
 
     public function destroy(Fournisseur $fournisseur)
     {
+        // Journaliser l'action "deleted" avant suppression
+        $this->logAction('deleted', Fournisseur::class, $fournisseur->id, "Fournisseur {$fournisseur->nom} supprimé");
+
         $fournisseur->delete();
         return redirect()->route('fournisseurs.index')->with('success', 'Fournisseur supprimé avec succès.');
     }

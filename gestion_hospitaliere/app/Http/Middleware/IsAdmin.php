@@ -16,7 +16,8 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {   
-        if(in_array($request->user()->role, ['Administrateur','Médecin'])) 
+        // if(in_array($request->user()->role, ['Administrateur','Médecin'])) 
+        if($request->user()->role=='Administrateur')
         {
             return $next($request);
         }else{

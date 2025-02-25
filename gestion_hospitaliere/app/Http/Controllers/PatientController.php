@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Patient;
 use App\Models\Consultation;
+use App\Traits\LogsActivity; // Ajouter le trait
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
+    use LogsActivity; // Utiliser le trait
+
     // Afficher la liste des patients
     public function index()
     {
@@ -31,8 +34,12 @@ class PatientController extends Controller
             'address' => 'required',
         ]);
 
-        Patient::create($request->all());
-        return redirect()->route('patients.index')->with('success', 'Patient créer avec succès.');
+        $patient = Patient::create($request->all());
+        
+        // Journaliser l'action "created"
+        $this->logAction('created', Patient::class, $patient->id, "Patient {$patient->name} créé");
+
+        return redirect()->route('patients.index')->with('success', 'Patient créé avec succès.');
     }
 
     // Afficher le formulaire de modification d'un patient
@@ -52,17 +59,23 @@ class PatientController extends Controller
         ]);
 
         $patient->update($request->all());
-        return redirect()->route('patients.index')->with('success', 'Patient mise à jour avec succès.');
+        
+        // Journaliser l'action "updated"
+        $this->logAction('updated', Patient::class, $patient->id, "Patient {$patient->name} mis à jour");
+
+        return redirect()->route('patients.index')->with('success', 'Patient mis à jour avec succès.');
     }
 
     // Supprimer un patient
     public function destroy(Patient $patient)
     {
+        // Journaliser l'action "deleted" avant suppression
+        $this->logAction('deleted', Patient::class, $patient->id, "Patient {$patient->name} supprimé");
+        
         $patient->delete();
+
         return redirect()->route('patients.index')->with('success', 'Patient supprimé avec succès.');
     }
-
-    
 
     // Afficher les consultations d'un patient
     public function show(Patient $patient)
@@ -70,6 +83,4 @@ class PatientController extends Controller
         $patient->load('consultations');
         return view('patients.show', compact('patient'));
     }
-
 }
-

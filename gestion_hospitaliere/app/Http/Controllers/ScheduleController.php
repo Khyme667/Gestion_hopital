@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Schedule;
 use App\Models\Employee;
+use App\Traits\LogsActivity; // Ajouter le trait
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
+    use LogsActivity; // Utiliser le trait
+
     public function index()
     {
         // Afficher tous les horaires
@@ -32,7 +35,10 @@ class ScheduleController extends Controller
             'end_time' => 'required|after:start_time',
         ]);
 
-        Schedule::create($request->all());
+        $schedule = Schedule::create($request->all());
+
+        // Journaliser l'action "created"
+        $this->logAction('created', Schedule::class, $schedule->id, "Horaire ajouté pour l'employé {$schedule->employee->name} le {$schedule->day}");
 
         return redirect()->route('schedules.index')->with('success', 'Horaire ajouté avec succès.');
     }
@@ -56,12 +62,17 @@ class ScheduleController extends Controller
 
         $schedule->update($request->all());
 
+        // Journaliser l'action "updated"
+        $this->logAction('updated', Schedule::class, $schedule->id, "Horaire mis à jour pour l'employé {$schedule->employee->name} le {$schedule->day}");
+
         return redirect()->route('schedules.index')->with('success', 'Horaire mis à jour avec succès.');
     }
 
     public function destroy(Schedule $schedule)
     {
-        // Supprimer un horaire
+        // Journaliser l'action "deleted" avant suppression
+        $this->logAction('deleted', Schedule::class, $schedule->id, "Horaire supprimé pour l'employé {$schedule->employee->name} le {$schedule->day}");
+
         $schedule->delete();
         return redirect()->route('schedules.index')->with('success', 'Horaire supprimé.');
     }

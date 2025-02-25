@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\FournisseurController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,22 +27,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::middleware('admin')->group(function () {
-    Route::resource('patients', PatientController::class);
-});
-
-// Route::middleware(['auth'])->group(function () {
-//     Route::resource('consultations', ConsultationController::class)->middleware('can:manage-consultations');
-//     Route::resource('employees', EmployeeController::class)->middleware('can:manage-consultations');
-//     Route::resource('schedules', ScheduleController::class)->middleware('can:manage-consultations');
-//     Route::resource('stocks', StockController::class)->middleware('can:manage-stocks');
-//     Route::resource('fournisseurs', FournisseurController::class)->middleware('can:manage-stocks');
-//     // Exemple pour une route de gestion des utilisateurs (à implémenter)
-//     // Route::get('/users', [UserController::class, 'index'])->middleware('can:manage-users');
+// Route::middleware('admin')->group(function () {
+//     Route::resource('patients', PatientController::class);
 // });
 
+Route::get('/activity-logs', [ActivityLogController::class, 'index'])
+    ->middleware(['auth', 'admin'])
+    ->name('activity-logs.index');
 
-
+Route::resource('patients', PatientController::class);
 Route::resource('consultations', ConsultationController::class);
 Route::resource('employees', EmployeeController::class);
 Route::resource('schedules', ScheduleController::class);
