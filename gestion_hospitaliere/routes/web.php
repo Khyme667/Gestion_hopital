@@ -8,6 +8,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\RendezVousController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,3 +46,10 @@ Route::resource('employees', EmployeeController::class);
 Route::resource('schedules', ScheduleController::class);
 Route::resource('stocks', StockController::class);
 Route::resource('fournisseurs', FournisseurController::class);
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('rendez-vous', RendezVousController::class);
+    Route::post('/rendez-vous/{rendezVous}/confirm', [RendezVousController::class, 'confirm'])->name('rendez-vous.confirm');
+    Route::post('/rendez-vous/{id}/update', [RendezVousController::class, 'update'])->name('rendez-vous.update');
+    Route::post('/rendez-vous/{rendezVous}/cancel', [RendezVousController::class, 'cancel'])->name('rendez-vous.cancel');
+});

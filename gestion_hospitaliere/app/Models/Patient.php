@@ -19,5 +19,10 @@ class Patient extends Model
     {
         return $this->hasMany(Consultation::class); // Un patient peut avoir plusieurs consultations
     }
+
+    public function rendezVous()
+    {
+        return $this->hasMany(RendezVous::class);
+    }
 }
 

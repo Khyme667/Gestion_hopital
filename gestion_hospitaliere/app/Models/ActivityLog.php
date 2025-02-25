@@ -9,7 +9,13 @@ class ActivityLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'action', 'model', 'model_id', 'description'];
+    protected $fillable = [
+        'user_id', 
+        'action', 
+        'model', 
+        'model_id', 
+        'description'
+    ];
 
     public function user()
     {

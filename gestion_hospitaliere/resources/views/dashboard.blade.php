@@ -46,7 +46,17 @@
     </div>
     <div class="row py-5">
 
-        <!-- Card pour les logs -->
+        <!-- Card pour les rendez vous -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Rendez-vous</h5>
+                    <a href="{{ route('rendez-vous.index') }}" class="btn btn-primary">Accéder</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card pour les heures -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
@@ -56,7 +66,7 @@
             </div>
         </div>
         
-        <!-- Card pour les logs -->
+        <!-- Card pour les fournisseurs -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">

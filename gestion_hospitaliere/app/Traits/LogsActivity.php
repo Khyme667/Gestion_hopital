@@ -13,7 +13,7 @@ trait LogsActivity
             'user_id' => Auth::id(),
             'action' => $action,
             'model' => class_basename($model),
-            'model_id' => $modelId,
+            'model_id' => $modelId ?? 0,
             'description' => $description,
         ]);
     }
