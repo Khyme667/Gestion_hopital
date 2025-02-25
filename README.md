@@ -60,3 +60,28 @@ Une application web développée avec **Laravel** pour gérer efficacement les o
    ```bash
    git clone https://github.com/Khyme667/Gestion_hopital.git
    cd gestion_hopital
+
+   Installer les dépendances :
+composer install
+npm install
+
+Configurer .env :
+
+Copiez .env.example vers .env et configurez PostgreSQL
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=db_name
+DB_USERNAME=votre_utilisateur
+DB_PASSWORD=votre_mot_de_passe
+
+
+migrer la base :
+php artisan migrate
+
+compile et lance le serveur
+npm run dev
+php artisan serve
+
+Crédits
+Développé par Tsitana Iloharaoke Khyme.

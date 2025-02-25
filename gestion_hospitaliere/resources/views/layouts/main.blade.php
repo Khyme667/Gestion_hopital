@@ -11,11 +11,9 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <!-- Lien vers le fichier CSS de Bootstrap -->
-        <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
         <!-- Script Bootstrap JS -->
-        <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('build/assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <link href="{{ asset('build/assets/fontawesome/css/all.min.js') }}" rel="stylesheet">
 
 
