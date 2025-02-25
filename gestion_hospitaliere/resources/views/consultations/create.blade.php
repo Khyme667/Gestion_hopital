@@ -2,7 +2,18 @@
 
 @section('content')
     <div class="container mt-5">
-        <h2>Ajouter une consultation pour</h2>
+        <h2>Ajouter une consultation</h2>
+
+        <!-- Affichage des erreurs de validation -->
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <form action="{{ route('consultations.store') }}" method="POST" enctype="multipart/form-data">
             @csrf

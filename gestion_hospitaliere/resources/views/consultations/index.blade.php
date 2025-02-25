@@ -2,6 +2,7 @@
 
 @section('content')
     <h1>Liste des Consultations</h1>
+
     <!-- Message de succès -->
     @if(session('success'))
         <div class="alert alert-success">
@@ -19,8 +20,8 @@
                 <th>Date</th>
                 <th>Raison</th>
                 <th>Médecin</th>
-                <th>Prescriptions</th>
                 <th>Ordonnances</th>
+                <th>Prescriptions</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,12 +35,12 @@
                     <td>{{ $consultation->employee->name ?? 'Non attribué' }}</td>
                     <td>
                         @if($consultation->ordonnances)
-                            <a href="{{ asset('storage/' . $consultation->ordonnances) }}" target="_blank">Télécharger</a>
+                            <a href="{{ route('consultations.download', [$consultation->id, 'ordonnances']) }}" target="_blank">Télécharger</a>
                         @endif
                     </td>
                     <td>
                         @if($consultation->prescriptions)
-                            <a href="{{ asset('storage/' . $consultation->prescriptions) }}" target="_blank">Télécharger</a>
+                            <a href="{{ route('consultations.download', [$consultation->id, 'prescriptions']) }}" target="_blank">Télécharger</a>
                         @endif
                     </td>
                     <td>

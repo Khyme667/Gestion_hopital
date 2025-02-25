@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Traits\LogsActivity; // Ajouter le trait
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
 
 class ConsultationController extends Controller
 {
@@ -66,20 +67,23 @@ class ConsultationController extends Controller
             'prescriptions' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
         ]);
 
-        // Gestion des fichiers
+        // Gestion des fichiers avec chiffrement
         $ordonnancesPath = null;
         if ($request->hasFile('ordonnances')) {
             $ordonnanceFile = $request->file('ordonnances');
-            $ordonnancesPath = $ordonnanceFile->storeAs('uploads/ordonnances', time() . '_' . $ordonnanceFile->getClientOriginalName(), 'public');
+            $encryptedContent = Crypt::encrypt(file_get_contents($ordonnanceFile->path()));
+            $ordonnancesPath = 'uploads/ordonnances/' . time() . '_' . $ordonnanceFile->getClientOriginalName();
+            Storage::disk('public')->put($ordonnancesPath, $encryptedContent);
         }
 
         $prescriptionsPath = null;
         if ($request->hasFile('prescriptions')) {
             $prescriptionFile = $request->file('prescriptions');
-            $prescriptionsPath = $prescriptionFile->storeAs('uploads/prescriptions', time() . '_' . $prescriptionFile->getClientOriginalName(), 'public');
+            $encryptedContent = Crypt::encrypt(file_get_contents($prescriptionFile->path()));
+            $prescriptionsPath = 'uploads/prescriptions/' . time() . '_' . $prescriptionFile->getClientOriginalName();
+            Storage::disk('public')->put($prescriptionsPath, $encryptedContent);
         }
 
-        // Création de la consultation
         $consultation = Consultation::create([
             'patient_id' => $validated['patient_id'],
             'employee_id' => $validated['employee_id'],
@@ -107,37 +111,54 @@ class ConsultationController extends Controller
             'prescriptions' => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048',
         ]);
 
-        // Gestion des fichiers ordonnances
+        // Gestion des fichiers avec chiffrement
         if ($request->hasFile('ordonnances')) {
             if ($consultation->ordonnances) {
                 Storage::disk('public')->delete($consultation->ordonnances);
             }
             $ordonnanceFile = $request->file('ordonnances');
-            $ordonnancesPath = $ordonnanceFile->storeAs('uploads/ordonnances', time() . '_' . $ordonnanceFile->getClientOriginalName(), 'public');
+            $encryptedContent = Crypt::encrypt(file_get_contents($ordonnanceFile->path()));
+            $ordonnancesPath = 'uploads/ordonnances/' . time() . '_' . $ordonnanceFile->getClientOriginalName();
+            Storage::disk('public')->put($ordonnancesPath, $encryptedContent);
             $consultation->ordonnances = $ordonnancesPath;
         }
 
-        // Gestion des fichiers prescriptions
         if ($request->hasFile('prescriptions')) {
             if ($consultation->prescriptions) {
                 Storage::disk('public')->delete($consultation->prescriptions);
             }
             $prescriptionFile = $request->file('prescriptions');
-            $prescriptionsPath = $prescriptionFile->storeAs('uploads/prescriptions', time() . '_' . $prescriptionFile->getClientOriginalName(), 'public');
+            $encryptedContent = Crypt::encrypt(file_get_contents($prescriptionFile->path()));
+            $prescriptionsPath = 'uploads/prescriptions/' . time() . '_' . $prescriptionFile->getClientOriginalName();
+            Storage::disk('public')->put($prescriptionsPath, $encryptedContent);
             $consultation->prescriptions = $prescriptionsPath;
         }
 
-        // Mise à jour des autres champs
         $consultation->patient_id = $validated['patient_id'];
         $consultation->employee_id = $validated['employee_id'];
         $consultation->date = $validated['date'];
         $consultation->raison = $validated['raison'];
-
         $consultation->save();
 
         // Journaliser l'action "updated"
         $this->logAction('updated', Consultation::class, $consultation->id, "Consultation du patient {$consultation->patient->name} mise à jour");
 
         return redirect()->route('consultations.index')->with('success', 'Consultation mise à jour avec succès.');
+    }
+
+    // Méthode pour télécharger les fichiers déchiffrés
+    public function download(Request $request, Consultation $consultation, $type)
+    {
+        $filePath = $type === 'ordonnances' ? $consultation->ordonnances : $consultation->prescriptions;
+
+        if ($filePath && Storage::disk('public')->exists($filePath)) {
+            $encryptedContent = Storage::disk('public')->get($filePath);
+            $decryptedContent = Crypt::decrypt($encryptedContent);
+            return response($decryptedContent)
+                ->header('Content-Type', 'application/octet-stream')
+                ->header('Content-Disposition', 'attachment; filename="' . basename($filePath) . '"');
+        }
+
+        return redirect()->back()->with('error', 'Fichier non trouvé.');
     }
 }

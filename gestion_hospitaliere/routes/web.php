@@ -35,6 +35,10 @@ Route::get('/activity-logs', [ActivityLogController::class, 'index'])
     ->middleware(['auth', 'admin'])
     ->name('activity-logs.index');
 
+Route::get('/consultations/{consultation}/download/{type}', [ConsultationController::class, 'download']) // Ajout de la route
+    ->middleware('auth')
+    ->name('consultations.download');
+
 Route::resource('patients', PatientController::class);
 Route::resource('consultations', ConsultationController::class);
 Route::resource('employees', EmployeeController::class);

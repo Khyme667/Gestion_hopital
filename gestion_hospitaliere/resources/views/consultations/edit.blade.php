@@ -4,6 +4,17 @@
     <div class="container mt-5">
         <h2>Modifier la consultation de {{ $consultation->patient->name }}</h2>
 
+        <!-- Affichage des erreurs de validation -->
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="{{ route('consultations.update', $consultation->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -31,7 +42,6 @@
                     @endforeach
                 </select>
             </div>
-            
 
             <div class="mb-3">
                 <label for="date" class="form-label">Date de la consultation</label>
@@ -47,7 +57,7 @@
                 <label for="ordonnances" class="form-label">Ordonnances</label>
                 <input type="file" class="form-control" id="ordonnances" name="ordonnances" accept="application/pdf,image/*">
                 @if($consultation->ordonnances)
-                    <a href="{{ asset('storage/' . $consultation->ordonnances) }}" target="_blank">Voir l'ordonnance actuelle</a>
+                    <a href="{{ route('consultations.download', [$consultation->id, 'ordonnances']) }}" target="_blank">Voir l'ordonnance actuelle</a>
                 @endif
             </div>
 
@@ -55,7 +65,7 @@
                 <label for="prescriptions" class="form-label">Prescriptions</label>
                 <input type="file" class="form-control" id="prescriptions" name="prescriptions" accept="application/pdf,image/*">
                 @if($consultation->prescriptions)
-                    <a href="{{ asset('storage/' . $consultation->prescriptions) }}" target="_blank">Voir la prescription actuelle</a>
+                    <a href="{{ route('consultations.download', [$consultation->id, 'prescriptions']) }}" target="_blank">Voir la prescription actuelle</a>
                 @endif
             </div>
 
