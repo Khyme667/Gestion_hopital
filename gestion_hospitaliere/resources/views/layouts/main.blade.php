@@ -6,6 +6,7 @@
     <title>Gestion Hospitalière</title>
     <!-- Lien vers le fichier CSS de Bootstrap -->
     <link href="{{ asset('build/assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('build/assets/fontawesome/css/all.min.css') }}" rel="stylesheet">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,6 +16,7 @@
 
         <!-- Script Bootstrap JS -->
         <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <link href="{{ asset('build/assets/fontawesome/css/all.min.js') }}" rel="stylesheet">
 
 
 

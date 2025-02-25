@@ -31,12 +31,6 @@
                     <td>{{ $rdv->raison }}</td>
                     <td>{{ ucfirst(str_replace('_', ' ', $rdv->status)) }}</td>
                     <td>
-                        {{-- <a href="{{ route('rendez-vous.edit', $rdv->id) }}" class="btn btn-warning">Modifier</a> --}}
-                        {{-- <form action="{{ route('rendez-vous.destroy', $rdv->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Supprimer ce rendez-vous ?')">Supprimer</button>
-                        </form> --}}
                         @if($rdv->status === 'en_attente')
                             <form action="{{ route('rendez-vous.confirm', $rdv->id) }}" method="POST" style="display:inline;">
                                 @csrf
